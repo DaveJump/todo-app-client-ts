@@ -1,0 +1,23 @@
+%display-flex{
+  display: flex;
+}
+%flex-center{
+  justify-content: center;
+}
+%flex-end{
+  justify-content: flex-end;
+}
+%flex-item-center{
+  align-items: center;
+}
+%flex-dir-col{
+  flex-direction: column;
+}
+%flex-between{
+  justify-content: space-between;
+}
+%text-overflow{
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
