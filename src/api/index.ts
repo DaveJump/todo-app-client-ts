@@ -1,5 +1,5 @@
 import axiosFetch from './handlers'
-import { FetchParams } from '../modules/interfaces'
+import { FetchParams, Obj } from '../modules/interfaces'
 
 const apiPrefix = '/api'
 
@@ -18,15 +18,19 @@ interface TodosAPI {
   [index: string]: (obj: FetchParams) => {}
 }
 
+interface Params extends Obj {
+  category?: string | number
+}
+
 export const todosAPI: TodosAPI = {
   // 获取todos
   getTodos ({ data, params, options }: FetchParams) {
-    let { category } = params
+    let { category } = params as Params
     return fetch('GET', `${apiPrefix}/categories/${category}/todos`)({ data, options })
   },
   // 新增todo
   addTodo ({ data, params, options }: FetchParams) {
-    let { category } = params
+    let { category } = params as Params
     return fetch('POST', `${apiPrefix}/categories/${category}/todos`)({ data, options })
   },
   // 批量修改todos

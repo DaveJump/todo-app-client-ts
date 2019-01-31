@@ -36,7 +36,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import Component, { mixins } from 'vue-class-component'
 import register from './register.vue'
 import JSEncrypt from 'jsencrypt'
@@ -51,6 +51,17 @@ const descriptor = {
   password: { required: true, message: '请输入密码' }
 }
 
+interface Form {
+  [index: string]: string,
+  username: string,
+  password: string
+}
+
+interface ErrorMessages {
+  username: string,
+  password: string
+}
+
 @Component({
   name: 'Login',
   components: {
@@ -58,12 +69,12 @@ const descriptor = {
   }
 })
 class Login extends mixins(mixin) {
-  form = {
+  form: Form = {
     username: '',
     password: ''
   }
   registerVisible = false
-  errorMessages = {
+  errorMessages: ErrorMessages = {
     username: '',
     password: ''
   }

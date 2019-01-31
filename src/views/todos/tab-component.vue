@@ -66,6 +66,9 @@ import { Obj } from '@/modules/interfaces'
   }
 })
 class TabComponent extends Vue {
+  // props
+  @Prop({ type: Function, default: () => () => {} }) fetchMethod!: (val: any) => {}
+
   list: Todo[] = []
   total = 0
   page = 0
@@ -78,9 +81,6 @@ class TabComponent extends Vue {
   $refs!: {
     checkboxes: any[]
   }
-
-  // props
-  @Prop({ default: () => {} }) fetchMethod!: (val: any) => {}
 
   @Watch('editing')
   onEditStateChange (val: boolean) {
@@ -100,12 +100,12 @@ class TabComponent extends Vue {
   }
 
   @Emit('complete-todo')
-  handleCompleteTodo (item: Todo): Todo {
+  handleCompleteTodo<T> (item: T): T {
     return item
   }
 
   @Emit('delete-todo')
-  handleDelTodo (item: Todo): Todo {
+  handleDelTodo<T> (item: T): T {
     return item
   }
 

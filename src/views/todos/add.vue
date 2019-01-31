@@ -49,10 +49,11 @@
   </div>
 </template>
 
-<script>
-import Component, { mixins } from 'vue-class-component'
+<script lang="ts">
+import { Component, Watch, Prop, Emit } from 'vue-property-decorator'
+import { mixins } from 'vue-class-component'
 import category from './category.vue'
-import { categories } from './vars'
+import { categories, Category } from './vars'
 import { todosAPI } from '@/api'
 import mixin from '@/mixins'
 import ValidateSchema from 'async-validator'
@@ -62,31 +63,34 @@ const descriptor = {
   desc: { required: true, message: '请输入待办描述' }
 }
 
+interface Form {
+  [index: string]: string,
+  todoName: string,
+  desc: string,
+  claValue: string
+}
+
+interface ErrorMessages {
+  [index: string]: string,
+  todoName: string,
+  desc: string
+}
+
 @Component({
   name: 'addTodo',
   components: {
     category
-  },
-  props: {
-    value: Boolean
-  },
-  watch: {
-    value (val) {
-      this.visible = val
-    },
-    visible (val) {
-      this.$emit('input', val)
-      !val && this.resetForm()
-    }
   }
 })
 class addTodo extends mixins(mixin) {
-  form = {
+  @Prop(Boolean) value!: boolean
+
+  form: Form = {
     todoName: '',
     desc: '',
     claValue: 'unclassified'
   }
-  errorMessages = {
+  errorMessages: ErrorMessages = {
     todoName: '',
     desc: ''
   }
@@ -94,8 +98,23 @@ class addTodo extends mixins(mixin) {
   claVisible = false
   validator = new ValidateSchema(descriptor)
 
+  @Watch('value')
+  onModelValueChange (val: boolean) {
+    this.visible = val
+  }
+
+  @Watch('visible')
+  onVisibleChange (val: boolean) {
+    this.emitVisibleValue(val)
+  }
+
+  @Emit('input')
+  emitVisibleValue<T> (val: T): T {
+    return val
+  }
+
   // methods
-  getClaValue (prop = 'label') {
+  getClaValue (prop = 'label'): number | string {
     let option = categories.find(cla => cla.value === this.form.claValue)
     return option ? option[prop] : ''
   }
@@ -130,11 +149,11 @@ class addTodo extends mixins(mixin) {
         }, 600)
         this.$toast.clear()
       } catch (e) {
-        console.err(e)
+        console.error(e)
       }
     })
   }
-  handleSetCla (val) {
+  handleSetCla (val: string) {
     if (val) {
       this.form.claValue = val
     }

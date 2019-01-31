@@ -3,6 +3,7 @@ export interface Obj {
 }
 
 export interface FetchParams {
+  [index: string]: any,
   data?: Obj,
   params?: Obj,
   options?: Obj

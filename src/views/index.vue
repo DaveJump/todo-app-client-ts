@@ -6,12 +6,12 @@
       <template v-if="!editing">
         <van-icon name="wap-nav" slot="left" size="18px" @click="menuVisible = true" />
         <span slot="right">
-          <van-icon name="edit" size="18px" style="margin-right: 15px;" @click="changeEditState" />
+          <van-icon name="edit" size="18px" style="margin-right: 15px;" @click="handleChangeEditState" />
           <van-icon name="add-o" size="18px" @click="addTodoVisible = true" />
         </span>
       </template>
       <template v-else>
-        <span class="nav-text" @click="changeEditState" slot="left">取消</span>
+        <span class="nav-text" @click="handleChangeEditState" slot="left">取消</span>
         <span class="nav-text" :class="{'disabled': !selectedTodos.length}" slot="right">
           <span style="margin-right: 15px;" @click="handleBatchDone">完成</span>
           <span @click="handleBatchDelete">删除</span>
@@ -64,7 +64,7 @@ class todoIndex extends Vue {
   handleTodoAdded () {
     this.$refs.todoList.handleRefreshList()
   }
-  changeEditState () {
+  handleChangeEditState () {
     this.editing = !this.editing
     this.$store.dispatch('changeEditState', this.editing)
   }

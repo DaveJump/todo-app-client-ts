@@ -43,8 +43,9 @@
   </div>
 </template>
 
-<script>
-import Component, { mixins } from 'vue-class-component'
+<script lang="ts">
+import { Component, Prop, Watch, Emit } from 'vue-property-decorator'
+import { mixins } from 'vue-class-component'
 import { usersAPI } from '@/api'
 import { RSA_PUBLIC_KEY } from '@/config'
 import JSEncrypt from 'jsencrypt'
@@ -60,7 +61,7 @@ const descriptor = {
   confirmPassword: [
     { required: true, message: '请再次输入密码' },
     {
-      validator (rule, value, callback, source, options) {
+      validator (rule: any, value: any, callback: any, source: any, options: any) {
         let errors = []
         if (value !== source['password']) {
           errors.push(new Error('密码长度需在6-12之间'))
@@ -72,33 +73,53 @@ const descriptor = {
   ]
 }
 
+interface Form {
+  [index: string]: string,
+  username: string,
+  password: string,
+  confirmPassword: string
+}
+
+interface ErrorMessages {
+  [index: string]: string,
+  username: string,
+  password: string,
+  confirmPassword: string
+}
+
 @Component({
-  name: 'register',
-  props: {
-    value: Boolean
-  },
-  watch: {
-    value (val) {
-      this.visible = val
-    },
-    visible (val) {
-      this.$emit('input', val)
-    }
-  }
+  name: 'register'
 })
 class Register extends mixins(mixin) {
-  form = {
+  @Prop(Boolean) value!: boolean
+
+  form: Form = {
     username: '',
     password: '',
     confirmPassword: ''
   }
-  errorMessages = {
+  errorMessages: ErrorMessages = {
     username: '',
     password: '',
     confirmPassword: ''
   }
   visible = false
   validator = new ValidateSchema(descriptor)
+
+  @Watch('value')
+  onModelValueChange (val: boolean) {
+    this.visible = val
+  }
+
+  @Watch('visible')
+  onVisibleChange (val: boolean) {
+    this.emitVisibleValue(val)
+  }
+
+  @Emit('input')
+  emitVisibleValue<T> (val: T): T {
+    return val
+  }
 
   // methods
   handleRegister () {

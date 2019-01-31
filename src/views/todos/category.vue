@@ -25,7 +25,7 @@ import { Vue, Component, Watch, Prop } from 'vue-property-decorator'
 })
 class Categories extends Vue {
   @Prop(Boolean) value!: boolean
-  @Prop({ default: 'unclassified' }) defaultValue!: string | number
+  @Prop({ type: [String, Number], default: 'unclassified' }) defaultValue!: string | number
 
   visible = false
   columns = [
@@ -37,7 +37,7 @@ class Categories extends Vue {
   claValue = this.defaultValue
 
   // computed
-  get defaultSelectIndex () {
+  get defaultSelectIndex (): number {
     let index = categories.findIndex(cla => cla.value === this.defaultValue)
     return index > -1 ? index : 0
   }

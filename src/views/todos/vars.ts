@@ -1,10 +1,12 @@
 export interface Category {
+  [index: string]: any,
   id: number,
   value: string,
   label?: string
 }
 
 export interface Todo {
+  [index: string]: any,
   _id: string | number,
   todoStatus: number,
   todoName: string,

@@ -17,10 +17,10 @@ import { Vue, Component, Prop, Watch, Emit } from 'vue-property-decorator'
   name: 'todoMenu'
 })
 class TodoMenu extends Vue {
+  @Prop({ default: false }) visible!: boolean
+
   menuVisible = false
   userName = '未登录'
-
-  @Prop({ default: false }) visible!: boolean
 
   @Watch('visible')
   onVisibleChange (val: boolean) {
@@ -34,7 +34,7 @@ class TodoMenu extends Vue {
   }
 
   @Emit('update:visible')
-  emitVisible (val: boolean) {
+  emitVisible<T> (val: T): T {
     return val
   }
 }
