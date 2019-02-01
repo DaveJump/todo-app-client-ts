@@ -88,7 +88,7 @@ interface ErrorMessages {
 }
 
 @Component({
-  name: 'register'
+  name: 'Register'
 })
 class Register extends mixins(mixin) {
   @Prop(Boolean) value!: boolean

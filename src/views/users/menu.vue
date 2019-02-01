@@ -14,7 +14,7 @@
 import { Vue, Component, Prop, Watch, Emit } from 'vue-property-decorator'
 
 @Component({
-  name: 'todoMenu'
+  name: 'TodoMenu'
 })
 class TodoMenu extends Vue {
   @Prop({ default: false }) visible!: boolean

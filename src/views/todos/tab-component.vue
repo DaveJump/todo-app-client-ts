@@ -53,6 +53,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Watch, Emit } from 'vue-property-decorator'
+import { State, Action } from 'vuex-class'
 import emptyBox from '@/components/empty.vue'
 import moment from 'moment'
 import { debounce } from 'lodash'
@@ -60,7 +61,7 @@ import { Todo, selectedListType } from './vars'
 import { Obj } from '@/modules/interfaces'
 
 @Component({
-  name: 'tabComponent',
+  name: 'TabComponent',
   components: {
     emptyBox
   }
@@ -82,6 +83,8 @@ class TabComponent extends Vue {
     checkboxes: any[]
   }
 
+  @State editing!: boolean
+
   @Watch('editing')
   onEditStateChange (val: boolean) {
     if (!val) {
@@ -91,7 +94,7 @@ class TabComponent extends Vue {
 
   @Watch('selected')
   onSelectedChange (val: selectedListType) {
-    this.$store.dispatch('changeSelected', val)
+    this.changeSelected(val)
   }
 
   @Watch('searchText')
@@ -109,13 +112,7 @@ class TabComponent extends Vue {
     return item
   }
 
-  // computed
-  get editing (): boolean {
-    let { editing } = this.$store.state
-    return editing
-  }
-
-  // methods
+  @Action changeSelected!: any
   async fetch (refresh = false) {
     if (refresh) {
       this.page = 1
@@ -162,7 +159,7 @@ class TabComponent extends Vue {
     } else {
       this.$refs.checkboxes[index].toggle()
       this.$nextTick(() => {
-        this.$store.dispatch('changeSelected', this.selected)
+        this.changeSelected(this.selected)
       })
     }
   }

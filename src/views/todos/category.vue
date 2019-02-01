@@ -21,7 +21,7 @@ import { categories } from './vars'
 import { Vue, Component, Watch, Prop } from 'vue-property-decorator'
 
 @Component({
-  name: 'categories'
+  name: 'Categories'
 })
 class Categories extends Vue {
   @Prop(Boolean) value!: boolean

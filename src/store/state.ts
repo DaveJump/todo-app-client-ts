@@ -1,11 +1,13 @@
 interface State {
-  editing?: boolean,
-  selectedTodos?: Array<object | number | string>
+  editing: boolean,
+  selectedTodos: Array<object | number | string>
 }
 
-const storeState: State = {
+const state: State = {
   editing: false,
   selectedTodos: []
 }
 
-export default storeState
+export default {
+  state
+}

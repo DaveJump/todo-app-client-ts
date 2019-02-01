@@ -77,12 +77,12 @@ interface ErrorMessages {
 }
 
 @Component({
-  name: 'addTodo',
+  name: 'AddTodo',
   components: {
     category
   }
 })
-class addTodo extends mixins(mixin) {
+class AddTodo extends mixins(mixin) {
   @Prop(Boolean) value!: boolean
 
   form: Form = {
@@ -166,5 +166,5 @@ class addTodo extends mixins(mixin) {
   }
 }
 
-export default addTodo
+export default AddTodo
 </script>

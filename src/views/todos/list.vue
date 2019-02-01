@@ -22,6 +22,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
+import { State, Action } from 'vuex-class'
 import { todosAPI } from '@/api'
 import { categories, Category, Todo, selectedListType } from './vars'
 import { cloneDeep } from 'lodash'
@@ -29,28 +30,22 @@ import tabComponent from './tab-component.vue'
 import { Obj } from '@/modules/interfaces'
 
 @Component({
-  name: 'todoList',
+  name: 'TodoList',
   components: {
     tabComponent
   }
 })
-class todoList extends Vue {
+class TodoList extends Vue {
   categories: Category[] = cloneDeep(categories)
   tabActive: number = 0
   $refs!: {
     tabComponent: tabComponent[]
   }
 
-  // computed
-  get editing (): boolean {
-    let { editing } = this.$store.state
-    return editing
-  }
-  get selectedTodos (): selectedListType {
-    return this.$store.state.selectedTodos
-  }
+  @State editing!: boolean
+  @State selectedTodos!: selectedListType
 
-  // methods
+  @Action changeEditState!: any
   async getTodoList (data: Obj = {}): Promise<any> {
     try {
       let res = await todosAPI.getTodos({
@@ -86,7 +81,7 @@ class todoList extends Vue {
               type === 'update' ? { set: { todoStatus: 1 } } : {}
             )
           })
-          this.$store.dispatch('changeEditState', false)
+          this.changeEditState(false)
           this.handleRefreshList()
         } catch (e) {
           console.error(e)
@@ -102,7 +97,7 @@ class todoList extends Vue {
   }
 }
 
-export default todoList
+export default TodoList
 </script>
 
 <style lang="scss">
