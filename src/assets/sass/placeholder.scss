@@ -21,3 +21,13 @@
   overflow: hidden;
   white-space: nowrap;
 }
+%children-page-common{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: $backgroundColor;
+  height: calc(100vh - 60px);
+  padding-top: 60px;
+  z-index: 5;
+}

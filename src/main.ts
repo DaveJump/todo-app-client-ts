@@ -22,7 +22,9 @@ import {
   Checkbox,
   CheckboxGroup,
   Search,
-  Dialog
+  Dialog,
+  Tabbar,
+  TabbarItem
 } from 'vant'
 
 import '@/assets/iconfont/iconfont.css'
@@ -43,6 +45,7 @@ Vue.use(Tab).use(Tabs)
 Vue.use(Checkbox).use(CheckboxGroup)
 Vue.use(Search)
 Vue.use(Dialog)
+Vue.use(Tabbar).use(TabbarItem)
 
 Vue.config.productionTip = false
 

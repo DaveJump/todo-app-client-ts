@@ -1,5 +1,5 @@
 body, html{
-  background: #fafafa;
+  background-color: $backgroundColor;
   user-select: none;
   -webkit-overflow-scrolling: touch;
 }
@@ -161,4 +161,15 @@ h6 {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+}
+
+.block{
+  &__title{
+    margin: 0;
+    font-weight: 400;
+    font-size: 14px;
+    color: $placeholderColor;
+    padding: 8px 15px;
+    display: block;
+  }
 }
