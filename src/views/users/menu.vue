@@ -12,6 +12,8 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Watch, Emit } from 'vue-property-decorator'
+import { getCookie } from '@/utils'
+import { UserInfo } from './vars'
 
 @Component({
   name: 'TodoMenu'
@@ -20,7 +22,8 @@ class TodoMenu extends Vue {
   @Prop({ default: false }) visible!: boolean
 
   menuVisible = false
-  userName = '未登录'
+  reserveUserName = '未登录'
+  userName = ''
 
   @Watch('visible')
   onVisibleChange (val: boolean) {
@@ -36,6 +39,17 @@ class TodoMenu extends Vue {
   @Emit('update:visible')
   emitVisible<T> (val: T): T {
     return val
+  }
+
+  getUsernameFromCookie (): string {
+    let infoCookie = getCookie('todoAppUserInfo')
+    let userInfo = infoCookie ? JSON.parse(infoCookie) : {}
+    let { username = this.reserveUserName } = userInfo as UserInfo
+    return username
+  }
+
+  mounted () {
+    this.userName = this.getUsernameFromCookie()
   }
 }
 

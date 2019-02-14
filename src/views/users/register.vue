@@ -44,8 +44,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Watch, Emit } from 'vue-property-decorator'
-import { mixins } from 'vue-class-component'
+import { Component, Prop, Watch, Emit, Mixins } from 'vue-property-decorator'
 import { usersAPI } from '@/api'
 import { RSA_PUBLIC_KEY } from '@/config'
 import JSEncrypt from 'jsencrypt'
@@ -90,7 +89,7 @@ interface ErrorMessages {
 @Component({
   name: 'Register'
 })
-class Register extends mixins(mixin) {
+class Register extends Mixins(mixin) {
   @Prop(Boolean) value!: boolean
 
   form: Form = {

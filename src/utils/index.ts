@@ -19,13 +19,13 @@ export const queryString = {
   }
 }
 
-export const setCookie = function (key: string, value: any, expSecs: number | string = 0): void {
+export const setCookie = function (key: string, value: any, expSecs: number | string = 0) {
   let oDate = new Date()
   oDate.setTime(oDate.getTime() + Number(expSecs) * 1000)
   document.cookie = `${key}=${escape(value)}${expSecs ? `;expires=${oDate.toUTCString()}` : ''}`
 }
 
-export const removeCookie = function (key: string): void {
+export const removeCookie = function (key: string) {
   setCookie(key, '', -1)
 }
 

@@ -50,8 +50,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Watch, Prop, Emit } from 'vue-property-decorator'
-import { mixins } from 'vue-class-component'
+import { Component, Watch, Prop, Emit, Mixins } from 'vue-property-decorator'
 import category from './category.vue'
 import { categories, Category } from './vars'
 import { todosAPI } from '@/api'
@@ -82,7 +81,7 @@ interface ErrorMessages {
     category
   }
 })
-class AddTodo extends mixins(mixin) {
+class AddTodo extends Mixins(mixin) {
   @Prop(Boolean) value!: boolean
 
   form: Form = {

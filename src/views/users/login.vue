@@ -37,7 +37,7 @@
 </template>
 
 <script lang="ts">
-import Component, { mixins } from 'vue-class-component'
+import { Component, Mixins } from 'vue-property-decorator'
 import register from './register.vue'
 import JSEncrypt from 'jsencrypt'
 import { RSA_PUBLIC_KEY } from '@/config'
@@ -45,6 +45,7 @@ import { usersAPI } from '@/api'
 import { setCookie } from '@/utils'
 import ValidateSchema from 'async-validator'
 import mixin from '@/mixins'
+import { UserInfo } from './vars'
 
 const descriptor = {
   username: { required: true, message: '请输入用户名' },
@@ -68,7 +69,7 @@ interface ErrorMessages {
     register
   }
 })
-class Login extends mixins(mixin) {
+class Login extends Mixins(mixin) {
   form: Form = {
     username: '',
     password: ''
@@ -99,8 +100,13 @@ class Login extends mixins(mixin) {
             password
           }
         })
-        let { token, expiresIn } = res.data.results
+        let { username, token, expiresIn } = res.data.results
+
+        let userInfo: UserInfo = {
+          username
+        }
         setCookie('todoAppUserToken', token, expiresIn)
+        setCookie('todoAppUserInfo', JSON.stringify(userInfo), expiresIn)
         setTimeout(() => {
           this.$router.push({ path: '/', query: { token } })
         }, 100)
