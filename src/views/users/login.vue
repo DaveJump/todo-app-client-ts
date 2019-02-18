@@ -83,38 +83,39 @@ class Login extends Mixins(mixin) {
 
   // methods
   async handleLogin () {
-    this.handleValidate(async () => {
-      try {
-        let encrypt = new JSEncrypt()
-        encrypt.setPublicKey(RSA_PUBLIC_KEY)
-        let password = encrypt.encrypt(this.form.password)
+    this.handleValidate()
+      .then(async () => {
+        try {
+          let encrypt = new JSEncrypt()
+          encrypt.setPublicKey(RSA_PUBLIC_KEY)
+          let password = encrypt.encrypt(this.form.password)
 
-        this.$toast({
-          type: 'loading',
-          duration: 0,
-          forbidClick: true
-        })
-        let res = await usersAPI.login({
-          data: {
-            username: this.form.username,
-            password
+          this.$toast({
+            type: 'loading',
+            duration: 0,
+            forbidClick: true
+          })
+          let res = await usersAPI.login({
+            data: {
+              username: this.form.username,
+              password
+            }
+          })
+          let { username, token, expiresIn } = res.data.results
+
+          let userInfo: UserInfo = {
+            username
           }
-        })
-        let { username, token, expiresIn } = res.data.results
-
-        let userInfo: UserInfo = {
-          username
+          setCookie('todoAppUserToken', token, expiresIn)
+          setCookie('todoAppUserInfo', JSON.stringify(userInfo), expiresIn)
+          setTimeout(() => {
+            this.$router.push({ path: '/', query: { token } })
+          }, 100)
+          this.$toast.clear()
+        } catch (e) {
+          console.error(e)
         }
-        setCookie('todoAppUserToken', token, expiresIn)
-        setCookie('todoAppUserInfo', JSON.stringify(userInfo), expiresIn)
-        setTimeout(() => {
-          this.$router.push({ path: '/', query: { token } })
-        }, 100)
-        this.$toast.clear()
-      } catch (e) {
-        console.error(e)
-      }
-    })
+      })
   }
 }
 

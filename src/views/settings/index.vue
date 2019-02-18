@@ -5,7 +5,7 @@
     <div class="block">
       <span class="block__title">账户</span>
       <van-cell-group>
-        <van-cell title="修改密码" is-link />
+        <van-cell title="修改密码" is-link @click="redirectTo('change-pwd')" />
       </van-cell-group>
     </div>
   </div>
@@ -17,7 +17,10 @@ import { Vue, Component } from 'vue-property-decorator'
 @Component
 class Settings extends Vue {
   handleBack () {
-    history.go(-1)
+    this.$router.back()
+  }
+  redirectTo (path: string) {
+    this.$router.push({ path: `/settings/${path}` })
   }
 }
 
@@ -26,6 +29,6 @@ export default Settings
 
 <style scoped lang="scss">
 .settings{
-  @extend %children-page-common;
+  @extend %single-page-common;
 }
 </style>

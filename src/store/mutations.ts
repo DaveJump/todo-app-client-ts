@@ -5,6 +5,9 @@ export default {
     },
     CHANGE_SELECTED (state: any, val: []) {
       state.selectedTodos = val
+    },
+    UPDATE_DIRECTION (state: any, val: string) {
+      state.direction = val
     }
   }
 }

@@ -122,36 +122,37 @@ class Register extends Mixins(mixin) {
 
   // methods
   handleRegister () {
-    this.handleValidate(async () => {
-      try {
+    this.handleValidate()
+      .then(async () => {
+        try {
         // RSA公钥加密密码
-        let encrypt = new JSEncrypt()
-        encrypt.setPublicKey(RSA_PUBLIC_KEY)
-        let password = encrypt.encrypt(this.form.password)
+          let encrypt = new JSEncrypt()
+          encrypt.setPublicKey(RSA_PUBLIC_KEY)
+          let password = encrypt.encrypt(this.form.password)
 
-        this.$toast({
-          type: 'loading',
-          duration: 0,
-          forbidClick: true
-        })
-        await usersAPI.register({
-          data: {
-            username: this.form.username,
-            password
-          }
-        })
-        this.$toast({
-          type: 'success',
-          message: '注册成功'
-        })
-        setTimeout(() => {
-          this.handleCloseRegister()
-        }, 300)
-        this.$toast.clear()
-      } catch (e) {
-        console.error(e)
-      }
-    })
+          this.$toast({
+            type: 'loading',
+            duration: 0,
+            forbidClick: true
+          })
+          await usersAPI.register({
+            data: {
+              username: this.form.username,
+              password
+            }
+          })
+          this.$toast({
+            type: 'success',
+            message: '注册成功'
+          })
+          setTimeout(() => {
+            this.handleCloseRegister()
+          }, 300)
+          this.$toast.clear()
+        } catch (e) {
+          console.error(e)
+        }
+      })
   }
   handleCloseRegister () {
     this.visible = false

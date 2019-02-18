@@ -121,36 +121,37 @@ class AddTodo extends Mixins(mixin) {
     this.visible = false
   }
   handleAddTodo () {
-    this.handleValidate(async () => {
-      try {
-        this.$toast({
-          type: 'loading',
-          forbidClick: true,
-          duration: 0
-        })
-        let { todoName, desc } = this.form
-        await todosAPI.addTodo({
-          data: {
-            todoName,
-            desc
-          },
-          params: {
-            category: this.getClaValue('id')
-          }
-        })
-        this.$toast({
-          type: 'success',
-          message: '新增成功'
-        })
-        setTimeout(() => {
-          this.visible = false
-          this.$emit('added')
-        }, 600)
-        this.$toast.clear()
-      } catch (e) {
-        console.error(e)
-      }
-    })
+    this.handleValidate()
+      .then(async () => {
+        try {
+          this.$toast({
+            type: 'loading',
+            forbidClick: true,
+            duration: 0
+          })
+          let { todoName, desc } = this.form
+          await todosAPI.addTodo({
+            data: {
+              todoName,
+              desc
+            },
+            params: {
+              category: this.getClaValue('id')
+            }
+          })
+          this.$toast({
+            type: 'success',
+            message: '新增成功'
+          })
+          setTimeout(() => {
+            this.visible = false
+            this.$emit('added')
+          }, 600)
+          this.$toast.clear()
+        } catch (e) {
+          console.error(e)
+        }
+      })
   }
   handleSetCla (val: string) {
     if (val) {

@@ -28,3 +28,10 @@ class MainPage extends Vue {
 
 export default MainPage
 </script>
+
+<style lang="scss" scoped>
+.main-page{
+  @extend %single-page-common;
+  padding-top: 0;
+}
+</style>

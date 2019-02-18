@@ -1,4 +1,4 @@
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Watch } from 'vue-property-decorator'
 import { debounce } from 'lodash'
 
 @Component
@@ -7,32 +7,41 @@ class Mixin extends Vue {
   form: any
   errorMessages: any
 
-  handleValidate (callback: () => {}) {
-    this.validator.validate(
-      {
-        ...this.form
-      },
-      (errors: any) => {
-        if (errors) {
-          let errorFields = errors.map((err: any) => err.field)
+  @Watch('$route')
+  handleRouteChange () {
+    setTimeout(() => {
+      this.resetForm()
+      this.resetErrorMessages()
+    }, 200)
+  }
 
-          Object.keys(this.form).forEach(key => {
-            if (errorFields.includes(key)) {
-              this.errorMessages[key] = errors.find((err: any) => err.field === key).message
-            } else {
-              this.errorMessages[key] = ''
-            }
-          })
-          return
+  handleValidate () {
+    return new Promise((resolve, reject) => {
+      this.validator.validate(
+        {
+          ...this.form
+        },
+        (errors: any) => {
+          if (errors) {
+            let errorFields = errors.map((err: any) => err.field)
+
+            Object.keys(this.form).forEach(key => {
+              if (errorFields.includes(key)) {
+                this.errorMessages[key] = errors.find((err: any) => err.field === key).message
+              } else {
+                this.errorMessages[key] = ''
+              }
+            })
+            reject(errors)
+            return
+          }
+          for (let key in this.errorMessages) {
+            this.errorMessages[key] = ''
+          }
+          resolve()
         }
-        for (let key in this.errorMessages) {
-          this.errorMessages[key] = ''
-        }
-        if (callback && typeof callback === 'function') {
-          callback()
-        }
-      }
-    )
+      )
+    })
   }
   handleInputChange = debounce(this.handleValidate, 400)
   resetForm () {

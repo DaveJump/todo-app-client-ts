@@ -1,11 +1,13 @@
 interface State {
   editing: boolean,
-  selectedTodos: Array<object | number | string>
+  selectedTodos: Array<object | number | string>,
+  direction: string
 }
 
 const state: State = {
   editing: false,
-  selectedTodos: []
+  selectedTodos: [],
+  direction: ''
 }
 
 export default {

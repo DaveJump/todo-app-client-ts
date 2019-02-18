@@ -3,15 +3,17 @@ import { FetchParams, Obj } from '../modules/interfaces'
 
 const apiPrefix = '/api'
 
-const fetch = (method: string, url: string) => {
-  return ({ data = {}, options = {} }: FetchParams) => axiosFetch(method, url, data, options)
-}
+const fetch = (method: string, url: string) => ({ data = {}, options = {} }: FetchParams) => axiosFetch(method, url, data, options)
 
 export const usersAPI = {
   // 用户注册
   register: fetch('POST', `${apiPrefix}/auth`),
   // 用户登录
-  login: fetch('PUT', `${apiPrefix}/auth`)
+  login: fetch('PUT', `${apiPrefix}/auth`),
+  // 修改密码
+  changePassword ({ data, options }: FetchParams) {
+    return fetch('PUT', `${apiPrefix}/user/password`)({ data, options })
+  }
 }
 
 interface TodosAPI {
