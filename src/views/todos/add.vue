@@ -1,46 +1,42 @@
 <template>
   <div class="add-todo">
-    <van-popup
-      class="add-todo-popup"
-      v-model="visible"
-      position="bottom">
-      <div class="header">
-        <i class="iconfont icon-i-close close-button" @click="handleCloseAddTodo"></i>
-        <span>新增待办</span>
-      </div>
-      <div class="fields">
-        <van-cell-group>
-          <van-field
-            label="标题"
-            placeholder="输入待办标题"
-            clearable
-            v-model="form.todoName"
-            @input="handleInputChange"
-            :error-message="errorMessages.todoName"
-          />
-          <van-field
-            label="描述"
-            placeholder="输入待办描述"
-            clearable
-            v-model="form.desc"
-            @input="handleInputChange"
-            type="textarea"
-            autosize
-            rows="3"
-            :error-message="errorMessages.desc"
-          />
-          <van-cell
-            @click="() => { claVisible = true }"
-            title="级别"
-            is-link
-            :value="getClaValue('label')"
-          />
-        </van-cell-group>
-      </div>
-      <div class="buttons">
-        <van-button type="primary" size="large" @click="handleAddTodo">新 增</van-button>
-      </div>
-    </van-popup>
+    <van-nav-bar :title="todoId ? '代办详情' : '新增代办'" fixed left-arrow @click-left="handleBack">
+      <van-icon slot="right" name="edit" size="18px" v-if="formReadonly" @click="formReadonly = false" />
+      <span slot="right" v-if="!formReadonly && todoId" @click="formReadonly = true">取消</span>
+    </van-nav-bar>
+
+    <div class="fields">
+      <van-cell-group>
+        <van-field
+          :readonly="formReadonly"
+          label="标题"
+          placeholder="输入待办标题"
+          clearable
+          v-model="form.todoName"
+          @input="handleInputChange"
+          :error-message="errorMessages.todoName"/>
+        <van-field
+          :readonly="formReadonly"
+          label="描述"
+          placeholder="输入待办描述"
+          clearable
+          v-model="form.desc"
+          @input="handleInputChange"
+          type="textarea"
+          autosize
+          rows="3"
+          :error-message="errorMessages.desc"/>
+        <van-cell
+          @click="toggleCategory"
+          title="级别"
+          :is-link="!formReadonly"
+          :value="getCategoryPropValue('label')"/>
+      </van-cell-group>
+    </div>
+    <div class="buttons" v-if="!formReadonly">
+      <van-button type="primary" size="large" @click="handleAddTodo">新 增</van-button>
+    </div>
+
     <category
       v-model="claVisible"
       :default-value="form.claValue"
@@ -56,6 +52,7 @@ import { categories, Category } from './vars'
 import { todosAPI } from '@/api'
 import mixin from '@/mixins'
 import ValidateSchema from 'async-validator'
+import { Obj } from '@/modules/interfaces'
 
 const descriptor = {
   todoName: { required: true, message: '请输入待办标题' },
@@ -82,8 +79,7 @@ interface ErrorMessages {
   }
 })
 class AddTodo extends Mixins(mixin) {
-  @Prop(Boolean) value!: boolean
-
+  formReadonly: boolean = false
   form: Form = {
     todoName: '',
     desc: '',
@@ -93,32 +89,22 @@ class AddTodo extends Mixins(mixin) {
     todoName: '',
     desc: ''
   }
-  visible = false
   claVisible = false
   validator = new ValidateSchema(descriptor)
 
-  @Watch('value')
-  onModelValueChange (val: boolean) {
-    this.visible = val
-  }
-
-  @Watch('visible')
-  onVisibleChange (val: boolean) {
-    this.emitVisibleValue(val)
-  }
-
-  @Emit('input')
-  emitVisibleValue<T> (val: T): T {
-    return val
+  get todoId (): string | null {
+    let id = this.$route.params.todoId
+    return id === '0' ? null : id
   }
 
   // methods
-  getClaValue (prop = 'label'): number | string {
+  getCategoryPropValue (prop = 'label'): number | string {
     let option = categories.find(cla => cla.value === this.form.claValue)
     return option ? option[prop] : ''
   }
-  handleCloseAddTodo () {
-    this.visible = false
+  mapCategoryValue (mapProp = 'id', mapValue: number | string = '', getProp = 'value') {
+    let option = categories.find(cla => cla[mapProp] === mapValue)
+    return option ? option[getProp] : ''
   }
   handleAddTodo () {
     this.handleValidate()
@@ -130,21 +116,33 @@ class AddTodo extends Mixins(mixin) {
             duration: 0
           })
           let { todoName, desc } = this.form
-          await todosAPI.addTodo({
-            data: {
-              todoName,
-              desc
-            },
-            params: {
-              category: this.getClaValue('id')
+          let method = this.todoId ? 'updateTodos' : 'addTodo'
+          let payload
+          if (this.todoId) {
+            payload = {
+              data: {
+                todos: [this.todoId],
+                set: { todoName, desc, category: this.getCategoryPropValue('id') }
+              }
             }
-          })
+          } else {
+            payload = {
+              data: {
+                todoName,
+                desc
+              },
+              params: {
+                category: this.getCategoryPropValue('id')
+              }
+            }
+          }
+          await todosAPI[method](payload)
           this.$toast({
             type: 'success',
             message: '新增成功'
           })
           setTimeout(() => {
-            this.visible = false
+            this.handleBack()
             this.$emit('added')
           }, 600)
           this.$toast.clear()
@@ -164,7 +162,47 @@ class AddTodo extends Mixins(mixin) {
     this.form.claValue = 'unclassified'
     this.resetErrorMessages()
   }
+  handleBack () {
+    this.$router.back()
+  }
+  toggleCategory () {
+    if (!this.formReadonly) {
+      this.claVisible = true
+    }
+  }
+  async getTodoById () {
+    try {
+      this.$toast({
+        type: 'loading',
+        forbidClick: true,
+        duration: 0
+      })
+      let res: Obj = await todosAPI.getTodoById({
+        params: { todoId: this.todoId }
+      })
+      let { todoName, desc, category } = res.data.results
+      this.form.todoName = todoName
+      this.form.desc = desc
+      this.form.claValue = this.mapCategoryValue('id', +category, 'value')
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  mounted () {
+    this.$nextTick(() => {
+      if (this.todoId) {
+
+      }
+    })
+  }
 }
 
 export default AddTodo
 </script>
+
+<style lang="scss" scoped>
+.add-todo{
+  @extend %single-page-common;
+}
+</style>

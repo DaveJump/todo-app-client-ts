@@ -5,7 +5,7 @@
       fixed>
       <template v-if="!editing">
         <van-icon slot="left" name="edit" size="18px" style="margin-right: 15px;" @click="handleChangeEditState" />
-        <van-icon slot="right" name="add-o" size="18px" @click="addTodoVisible = true" />
+        <van-icon slot="right" name="add-o" size="18px" @click="handleAddTodo" />
       </template>
       <template v-else>
         <span class="nav-text" @click="handleChangeEditState" slot="left">取消</span>
@@ -16,7 +16,6 @@
       </template>
     </van-nav-bar>
     <todo-list :editing="editing" ref="todoList"></todo-list>
-    <add-todo v-model="addTodoVisible" @added="handleTodoAdded"></add-todo>
   </div>
 </template>
 
@@ -35,7 +34,6 @@ import { selectedListType } from './vars'
   }
 })
 class TodoMain extends Vue {
-  addTodoVisible: boolean = false
   editing: boolean = false
   $refs!: {
     todoList: todoList
@@ -66,6 +64,9 @@ class TodoMain extends Vue {
     if (this.storedSelectedTodos.length) {
       this.$refs.todoList.batchOperate('delete')
     }
+  }
+  handleAddTodo () {
+    this.$router.push({ name: 'todoDetail', path: '/todo', params: { todoId: '0' } })
   }
 }
 

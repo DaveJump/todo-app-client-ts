@@ -30,6 +30,11 @@ export const todosAPI: TodosAPI = {
     let { category } = params as Params
     return fetch('GET', `${apiPrefix}/categories/${category}/todos`)({ data, options })
   },
+  // 获取单个todo信息
+  getTodoById ({ data, params, options }: FetchParams) {
+    let { todoId } = params as Params
+    return fetch('GET', `${apiPrefix}/todo/${todoId}`)({ data, options })
+  },
   // 新增todo
   addTodo ({ data, params, options }: FetchParams) {
     let { category } = params as Params

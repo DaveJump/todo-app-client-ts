@@ -8,6 +8,14 @@ const routes = [
     component: () => import('../views/index.vue')
   },
   {
+    path: '/todo/:todoId',
+    name: 'todoDetail',
+    meta: {
+      keepAlive: true
+    },
+    component: () => import('../views/todos/add.vue')
+  },
+  {
     path: '/settings',
     name: 'settings',
     meta: {

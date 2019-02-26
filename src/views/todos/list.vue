@@ -48,13 +48,13 @@ class TodoList extends Vue {
   @Action changeEditState!: any
   async getTodoList (data: Obj = {}): Promise<any> {
     try {
-      let res = await todosAPI.getTodos({
+      let res: Obj = await todosAPI.getTodos({
         data,
         params: {
           category: this.tabActive
         }
       })
-      return (res as Obj).data.results
+      return res.data.results
     } catch (e) {
       console.error(e)
     }
