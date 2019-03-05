@@ -127,11 +127,11 @@ class ChangePwd extends Mixins(mixin) {
             type: 'success',
             message: '修改成功，请重新登录'
           })
-          this.$toast.clear()
           this.$router.replace({ path: '/login', query: { token: '' } })
           removeCookie('todoAppUserToken')
           removeCookie('todoAppUserInfo')
         } catch (e) {
+          this.$toast.clear()
           console.error(e)
         }
       })

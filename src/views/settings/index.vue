@@ -20,7 +20,8 @@ class Settings extends Vue {
     this.$router.back()
   }
   redirectTo (path: string) {
-    this.$router.push({ path: `/settings/${path}` })
+    let query = this.$route.query
+    this.$router.push({ path: `/settings/${path}`, query })
   }
 }
 

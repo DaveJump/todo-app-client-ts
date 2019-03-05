@@ -2,7 +2,7 @@
   <div class="add-todo">
     <van-nav-bar :title="todoId ? '代办详情' : '新增代办'" fixed left-arrow @click-left="handleBack">
       <van-icon slot="right" name="edit" size="18px" v-if="formReadonly" @click="formReadonly = false" />
-      <span slot="right" v-if="!formReadonly && todoId" @click="formReadonly = true">取消</span>
+      <span class="nav-text" slot="right" v-if="!formReadonly && todoId" @click="formReadonly = true">取消</span>
     </van-nav-bar>
 
     <div class="fields">
@@ -34,7 +34,7 @@
       </van-cell-group>
     </div>
     <div class="buttons" v-if="!formReadonly">
-      <van-button type="primary" size="large" @click="handleAddTodo">新 增</van-button>
+      <van-button type="primary" size="large" @click="handleAddTodo">{{todoId ? '修改' : '新增'}}</van-button>
     </div>
 
     <category
@@ -79,7 +79,7 @@ interface ErrorMessages {
   }
 })
 class AddTodo extends Mixins(mixin) {
-  formReadonly: boolean = false
+  formReadonly: boolean = true
   form: Form = {
     todoName: '',
     desc: '',
@@ -95,6 +95,19 @@ class AddTodo extends Mixins(mixin) {
   get todoId (): string | null {
     let id = this.$route.params.todoId
     return id === '0' ? null : id
+  }
+
+  @Watch('$route.path', { immediate: true })
+  handleRouteParamsChange (val: string) {
+    this.$nextTick(() => {
+      if (this.todoId) {
+        this.formReadonly = true
+        this.getTodoById()
+      } else {
+        this.formReadonly = false
+        this.resetForm()
+      }
+    })
   }
 
   // methods
@@ -143,7 +156,6 @@ class AddTodo extends Mixins(mixin) {
           })
           setTimeout(() => {
             this.handleBack()
-            this.$emit('added')
           }, 600)
           this.$toast.clear()
         } catch (e) {
@@ -178,7 +190,7 @@ class AddTodo extends Mixins(mixin) {
         duration: 0
       })
       let res: Obj = await todosAPI.getTodoById({
-        params: { todoId: this.todoId }
+        data: { todo_id: this.todoId }
       })
       let { todoName, desc, category } = res.data.results
       this.form.todoName = todoName
@@ -186,15 +198,9 @@ class AddTodo extends Mixins(mixin) {
       this.form.claValue = this.mapCategoryValue('id', +category, 'value')
     } catch (e) {
       console.error(e)
+    } finally {
+      this.$toast.clear()
     }
-  }
-
-  mounted () {
-    this.$nextTick(() => {
-      if (this.todoId) {
-
-      }
-    })
   }
 }
 

@@ -66,7 +66,8 @@ class TodoMain extends Vue {
     }
   }
   handleAddTodo () {
-    this.$router.push({ name: 'todoDetail', path: '/todo', params: { todoId: '0' } })
+    let query = this.$route.query
+    this.$router.push({ name: 'todoDetail', path: '/todo', params: { todoId: '0' }, query })
   }
 }
 

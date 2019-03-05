@@ -7,7 +7,7 @@ export interface Category {
 
 export interface Todo {
   [index: string]: any,
-  _id: string | number,
+  _id: string,
   todoStatus: number,
   todoName: string,
   desc: string,

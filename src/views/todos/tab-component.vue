@@ -18,7 +18,7 @@
                 <van-cell
                   class="todo-item"
                   :title="item.todoName"
-                  @click="handleClickCell(index)"
+                  @click="handleClickCell(index, item)"
                   clickable>
                   <div slot="title">
                     <div :class="{'done': +item.todoStatus === 1}">{{item.todoName}}</div>
@@ -153,9 +153,10 @@ class TabComponent extends Vue {
   getTodoDate (item: Todo): string {
     return moment(new Date(item.createTime)).format('YYYY-MM-DD')
   }
-  handleClickCell (index: number) {
+  handleClickCell (index: number, item: Todo) {
     if (!this.editing) {
-      console.log('to-detail !!')
+      let query = this.$route.query
+      this.$router.push({ path: '/todo', name: 'todoDetail', params: { todoId: item._id }, query })
     } else {
       this.$refs.checkboxes[index].toggle()
       this.$nextTick(() => {

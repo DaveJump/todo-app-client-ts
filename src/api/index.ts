@@ -31,14 +31,13 @@ export const todosAPI: TodosAPI = {
     return fetch('GET', `${apiPrefix}/categories/${category}/todos`)({ data, options })
   },
   // 获取单个todo信息
-  getTodoById ({ data, params, options }: FetchParams) {
-    let { todoId } = params as Params
-    return fetch('GET', `${apiPrefix}/todo/${todoId}`)({ data, options })
+  getTodoById ({ data, options }: FetchParams) {
+    return fetch('GET', `${apiPrefix}/todo`)({ data, options })
   },
   // 新增todo
   addTodo ({ data, params, options }: FetchParams) {
     let { category } = params as Params
-    return fetch('POST', `${apiPrefix}/categories/${category}/todos`)({ data, options })
+    return fetch('POST', `${apiPrefix}/categories/${category}/todo`)({ data, options })
   },
   // 批量修改todos
   updateTodos: fetch('PUT', `${apiPrefix}/todos`),

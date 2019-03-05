@@ -12,17 +12,17 @@ const router = new Router({
 
 // 跳转前检查用户登录状态
 router.beforeEach((to, from, next) => {
-  // let cookieToken = getCookie('todoAppUserToken')
-  // let toToken = to.query.token
-  // let path = to.path
+  let cookieToken = getCookie('todoAppUserToken')
+  let toToken = to.query.token
+  let path = to.path
 
-  // if (path !== '/login') {
-  //   toToken && cookieToken ? next({ path, query: { token: cookieToken } }) : next({ path: '/login' })
-  // } else {
-  //   next()
-  // }
+  if (path !== '/login') {
+    toToken && cookieToken ? next() : next({ path: '/login' })
+  } else {
+    next()
+  }
 
-  next()
+  // next()
 })
 
 const history = window.sessionStorage

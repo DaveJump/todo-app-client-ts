@@ -10,7 +10,6 @@ class Mixin extends Vue {
   @Watch('$route')
   handleRouteChange () {
     setTimeout(() => {
-      this.resetForm()
       this.resetErrorMessages()
     }, 200)
   }

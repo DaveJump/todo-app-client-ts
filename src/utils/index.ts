@@ -34,7 +34,7 @@ export const getCookie = function (key: string): string | void {
   for (let i = 0; i < cookieArr.length; i++) {
     let arr = cookieArr[i].split('=')
     if (arr[0] === key) {
-      return arr[1]
+      return unescape(arr[1])
     }
   }
 }

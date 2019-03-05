@@ -124,6 +124,8 @@ export default Login
 
 <style lang="scss" scoped>
 .login-field{
+  @extend %single-page-common;
+  padding-top: 0;
   &__title{
     padding: 30px 0 25px 0;
     font-size: 30px;

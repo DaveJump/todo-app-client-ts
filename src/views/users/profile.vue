@@ -28,9 +28,9 @@ class Profile extends Vue {
     let { username = this.reserveUserName } = userInfo as UserInfo
     return username
   }
-
   redirectTo (pageName: string) {
-    this.$router.push({ path: `/${pageName}` })
+    let query = this.$route.query
+    this.$router.push({ path: `/${pageName}`, query })
   }
 
   mounted () {

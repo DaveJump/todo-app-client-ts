@@ -16,10 +16,6 @@ import { State } from 'vuex-class'
 @Component
 class App extends Vue {
   @State direction!: string
-
-  beforeCreate () {
-    this.$router.replace({ path: '/' })
-  }
 }
 
 export default App
