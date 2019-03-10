@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import axios from 'axios'
+import API from './api'
 
 import {
   Toast,
@@ -50,6 +51,8 @@ Vue.use(Tabbar).use(TabbarItem)
 Vue.config.productionTip = false
 
 Vue.prototype.$axios = () => axios.create()
+
+Vue.prototype.$API = API
 
 new Vue({
   router,

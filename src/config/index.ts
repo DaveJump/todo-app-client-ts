@@ -5,6 +5,12 @@ I6VqPzJVX/Kl1HbzbrB+zrj/QyKHEUcvNAL0eWpYMIOOdgNYKlKEHNfyiSbJWC6a\n\
 q6n05Z/G+qqfZKV8FwIDAQAB\n\
 -----END PUBLIC KEY-----`
 
+export const cookieTokenName = 'todoAppUserToken'
+
+export const userInfoName = 'todoAppUserInfo'
+
 export default {
-  RSA_PUBLIC_KEY
+  RSA_PUBLIC_KEY,
+  cookieTokenName,
+  userInfoName
 }

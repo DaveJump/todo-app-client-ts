@@ -148,7 +148,6 @@ class Register extends Mixins(mixin) {
           setTimeout(() => {
             this.handleCloseRegister()
           }, 300)
-          this.$toast.clear()
         } catch (e) {
           console.error(e)
         }

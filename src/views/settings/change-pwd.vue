@@ -44,7 +44,7 @@ import { Vue, Component, Mixins } from 'vue-property-decorator'
 import mixin from '@/mixins'
 import ValidateSchema from 'async-validator'
 import { usersAPI } from '@/api'
-import { RSA_PUBLIC_KEY } from '@/config'
+import { RSA_PUBLIC_KEY, cookieTokenName, userInfoName } from '@/config'
 import JSEncrypt from 'jsencrypt'
 import { removeCookie, getCookie } from '@/utils'
 
@@ -127,11 +127,10 @@ class ChangePwd extends Mixins(mixin) {
             type: 'success',
             message: '修改成功，请重新登录'
           })
-          this.$router.replace({ path: '/login', query: { token: '' } })
-          removeCookie('todoAppUserToken')
-          removeCookie('todoAppUserInfo')
+          this.$router.replace({ path: '/login' })
+          removeCookie(cookieTokenName)
+          removeCookie(userInfoName)
         } catch (e) {
-          this.$toast.clear()
           console.error(e)
         }
       })

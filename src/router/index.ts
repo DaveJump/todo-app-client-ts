@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import routes from './routes'
 import store from '../store'
 import { getCookie } from '@/utils'
+import { cookieTokenName } from '@/config'
 
 Vue.use(Router)
 
@@ -12,12 +13,11 @@ const router = new Router({
 
 // 跳转前检查用户登录状态
 router.beforeEach((to, from, next) => {
-  let cookieToken = getCookie('todoAppUserToken')
-  let toToken = to.query.token
+  let cookieToken = getCookie(cookieTokenName)
   let path = to.path
 
   if (path !== '/login') {
-    toToken && cookieToken ? next() : next({ path: '/login' })
+    cookieToken ? next() : next({ path: '/login' })
   } else {
     next()
   }
@@ -25,6 +25,7 @@ router.beforeEach((to, from, next) => {
   // next()
 })
 
+// 路由前进后退动画
 const history = window.sessionStorage
 history.clear()
 let historyCount = history.getItem('count') || 0 * 1

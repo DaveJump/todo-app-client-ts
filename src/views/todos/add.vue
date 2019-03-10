@@ -157,7 +157,6 @@ class AddTodo extends Mixins(mixin) {
           setTimeout(() => {
             this.handleBack()
           }, 600)
-          this.$toast.clear()
         } catch (e) {
           console.error(e)
         }
@@ -189,10 +188,11 @@ class AddTodo extends Mixins(mixin) {
         forbidClick: true,
         duration: 0
       })
-      let res: Obj = await todosAPI.getTodoById({
+      let results: Obj = await todosAPI.getTodoById({
         data: { todo_id: this.todoId }
       })
-      let { todoName, desc, category } = res.data.results
+      let { todoName, desc, category } = results
+
       this.form.todoName = todoName
       this.form.desc = desc
       this.form.claValue = this.mapCategoryValue('id', +category, 'value')

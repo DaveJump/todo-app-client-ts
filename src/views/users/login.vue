@@ -40,7 +40,7 @@
 import { Component, Mixins } from 'vue-property-decorator'
 import register from './register.vue'
 import JSEncrypt from 'jsencrypt'
-import { RSA_PUBLIC_KEY } from '@/config'
+import { RSA_PUBLIC_KEY, userInfoName, cookieTokenName } from '@/config'
 import { usersAPI } from '@/api'
 import { setCookie } from '@/utils'
 import ValidateSchema from 'async-validator'
@@ -95,21 +95,21 @@ class Login extends Mixins(mixin) {
             duration: 0,
             forbidClick: true
           })
-          let res = await usersAPI.login({
+          let results = await usersAPI.login({
             data: {
               username: this.form.username,
               password
             }
           })
-          let { username, token, expiresIn } = res.data.results
+          let { username, token, expiresIn } = results
 
           let userInfo: UserInfo = {
             username
           }
-          setCookie('todoAppUserToken', token, expiresIn)
-          setCookie('todoAppUserInfo', JSON.stringify(userInfo), expiresIn)
+          setCookie(cookieTokenName, token, expiresIn)
+          setCookie(userInfoName, JSON.stringify(userInfo), expiresIn)
           setTimeout(() => {
-            this.$router.push({ path: '/', query: { token } })
+            this.$router.push({ path: '/' })
           }, 100)
           this.$toast.clear()
         } catch (e) {

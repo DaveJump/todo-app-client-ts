@@ -3,7 +3,7 @@
     <van-list
       v-model="loadingBottom"
       :finished="editing || loadMoreFinished"
-      @load="loadMore">
+      @load="handleLoadMore">
       <van-search placeholder="输入待办名称搜索" background="none" v-model="searchText"></van-search>
       <van-pull-refresh v-model="loadingTop" @refresh="fetch(true)" :disabled="editing">
         <empty-box v-if="!list.length && !this.loadingBottom">空空如也</empty-box>
@@ -73,7 +73,7 @@ class TabComponent extends Vue {
   list: Todo[] = []
   total = 0
   page = 0
-  pageSize = 20
+  pageSize = 25
   loadingTop = false
   loadingBottom = false
   loadMoreFinished = false
@@ -130,6 +130,8 @@ class TabComponent extends Vue {
         todo_name: this.searchText
       })
 
+      console.log('results', results)
+
       this.loadMoreFinished = false
 
       let { list = [], total = 0 } = results || {}
@@ -149,7 +151,7 @@ class TabComponent extends Vue {
     !this.loadMoreFinished && this.page++
     this.fetch()
   }
-  loadMore = debounce(this.handleLoadMore, 400)
+  // loadMore = debounce(this.handleLoadMore, 400)
   getTodoDate (item: Todo): string {
     return moment(new Date(item.createTime)).format('YYYY-MM-DD')
   }
