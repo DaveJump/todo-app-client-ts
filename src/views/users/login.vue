@@ -95,19 +95,19 @@ class Login extends Mixins(mixin) {
             duration: 0,
             forbidClick: true
           })
-          let results = await usersAPI.login({
+          await usersAPI.login({
             data: {
               username: this.form.username,
               password
             }
           })
-          let { username, token, expiresIn } = results
+          // let { username, token, expiresIn } = results
 
-          let userInfo: UserInfo = {
-            username
-          }
-          setCookie(cookieTokenName, token, expiresIn)
-          setCookie(userInfoName, JSON.stringify(userInfo), expiresIn)
+          // let userInfo: UserInfo = {
+          //   username
+          // }
+          // setCookie(cookieTokenName, token, expiresIn)
+          // setCookie(userInfoName, JSON.stringify(userInfo), expiresIn)
           setTimeout(() => {
             this.$router.push({ path: '/' })
           }, 100)
