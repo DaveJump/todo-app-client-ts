@@ -1,4 +1,5 @@
 import { Obj } from '../modules/interfaces'
+const Storage = window.localStorage
 
 export const queryString = {
   stringify (obj: Obj): string {
@@ -39,9 +40,19 @@ export const getCookie = function (key: string): string | void {
   }
 }
 
+export const setStorage = function (key: string, value: string): void {
+  Storage.setItem(key, value)
+}
+
+export const getStorage = function (key: string): string | null {
+  return Storage.getItem(key)
+}
+
 export default {
   queryString,
   setCookie,
   removeCookie,
-  getCookie
+  getCookie,
+  setStorage,
+  getStorage
 }

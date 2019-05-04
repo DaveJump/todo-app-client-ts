@@ -12,7 +12,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
-import { getCookie } from '@/utils'
+import { getCookie, getStorage } from '@/utils'
 import { UserInfo } from './vars'
 
 @Component({
@@ -23,8 +23,8 @@ class Profile extends Vue {
   userName = ''
 
   getUsernameFromCookie (): string {
-    let infoCookie = getCookie('todoAppUserInfo')
-    let userInfo = infoCookie ? JSON.parse(infoCookie) : {}
+    let info = getStorage('todoAppUserInfo')
+    let userInfo = info ? JSON.parse(info) : {}
     let { username = this.reserveUserName } = userInfo as UserInfo
     return username
   }

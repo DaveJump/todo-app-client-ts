@@ -40,9 +40,9 @@
 import { Component, Mixins } from 'vue-property-decorator'
 import register from './register.vue'
 import JSEncrypt from 'jsencrypt'
-import { RSA_PUBLIC_KEY, userInfoName, cookieTokenName } from '@/config'
+import { RSA_PUBLIC_KEY, userInfoName } from '@/config'
 import { usersAPI } from '@/api'
-import { setCookie } from '@/utils'
+import { setCookie, setStorage } from '@/utils'
 import ValidateSchema from 'async-validator'
 import mixin from '@/mixins'
 import { UserInfo } from './vars'
@@ -95,19 +95,17 @@ class Login extends Mixins(mixin) {
             duration: 0,
             forbidClick: true
           })
-          await usersAPI.login({
+          let results = await usersAPI.login({
             data: {
               username: this.form.username,
               password
             }
           })
-          // let { username, token, expiresIn } = results
-
-          // let userInfo: UserInfo = {
-          //   username
-          // }
-          // setCookie(cookieTokenName, token, expiresIn)
-          // setCookie(userInfoName, JSON.stringify(userInfo), expiresIn)
+          let { username } = results
+          let userInfo: UserInfo = {
+            username
+          }
+          setStorage(userInfoName, JSON.stringify(userInfo))
           setTimeout(() => {
             this.$router.push({ path: '/' })
           }, 100)
