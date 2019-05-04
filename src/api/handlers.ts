@@ -25,7 +25,7 @@ Axios.interceptors.request.use(
       let token = getCookie(cookieTokenName)
       config.headers.Authorization = `Bearer ${token}`
     }
-    delete config.headers.cookie
+    delete config.headers.Cookie
     return config
   }
 )
