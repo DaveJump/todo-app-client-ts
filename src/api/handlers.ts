@@ -8,8 +8,7 @@ import { cookieTokenName } from '@/config'
 const Axios = axios.create({
   baseURL: '/api',
   timeout: 20000,
-  responseType: 'json',
-  withCredentials: false
+  responseType: 'json'
 })
 
 // 用户登录和注册不需要带token
@@ -26,6 +25,7 @@ Axios.interceptors.request.use(
       let token = getCookie(cookieTokenName)
       config.headers.Authorization = `Bearer ${token}`
     }
+    delete config.headers.cookie
     return config
   }
 )
