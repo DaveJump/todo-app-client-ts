@@ -1,20 +1,8 @@
-# todo-app
+#### Summary
 
-#### 项目介绍
-A todo-app with Vue.js、Koa2 and mongodb 
+一款基于vue、koa、mongodb开发的简易的todo应用。
+项目已上线: [todo-app](https://todo.davejump66.top)
 
-#### 软件架构
-软件架构说明
+#### Usage
 
-
-#### 安装教程
-
-1. xxxx
-2. xxxx
-3. xxxx
-
-#### 使用说明
-
-1. xxxx
-2. xxxx
-3. xxx
+`yarn dev` 本地运行
