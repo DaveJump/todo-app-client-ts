@@ -5,6 +5,14 @@
   </div>
 </template>
 
+<script>
+import { Vue, Component } from 'vue-property-decorator'
+
+@Component
+class EmptyBox extends Vue {}
+export default EmptyBox
+</script>
+
 <style lang="scss" scoped>
   .empty-box{
     text-align: center;

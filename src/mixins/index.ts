@@ -40,7 +40,7 @@ class Mixin extends Vue {
           resolve()
         }
       )
-    })
+    }).catch(e => {})
   }
   handleInputChange = debounce(this.handleValidate, 400)
   resetForm () {
