@@ -24,7 +24,7 @@
                     <div :class="{'done': +item.todoStatus === 1}">{{item.todoName}}</div>
                     <div class="van-cell__label" :class="{'done': +item.todoStatus === 1}">{{item.desc}}</div>
                   </div>
-                  <van-checkbox class="checkbox" v-if="editing" :name="item._id" ref="checkboxes" />
+                  <van-checkbox class="checkbox" v-if="editing" :name="item._id" :ref="`${item._id}_checkbox`" />
                   <div class="value">
                     <div class="date">{{getTodoDate(item)}}</div>
                     <div class="done-icon"><van-icon name="completed" v-if="+item.todoStatus === 1" /></div>
@@ -79,9 +79,6 @@ class TabComponent extends Vue {
   loadMoreFinished = false
   selected: selectedListType = []
   searchText = ''
-  $refs!: {
-    checkboxes: any[]
-  }
 
   @State editing!: boolean
 
@@ -156,14 +153,19 @@ class TabComponent extends Vue {
     return moment(new Date(item.createTime)).format('YYYY-MM-DD')
   }
   handleClickCell (index: number, item: Todo) {
+    let key = item._id
+
     if (!this.editing) {
       let query = this.$route.query
-      this.$router.push({ path: '/todo', name: 'todoDetail', params: { todoId: item._id }, query })
+      this.$router.push({ path: '/todo', name: 'todoDetail', params: { todoId: key }, query })
     } else {
-      this.$refs.checkboxes[index].toggle()
-      this.$nextTick(() => {
-        this.changeSelected(this.selected)
-      })
+      let ckb = (this.$refs[`${key}_checkbox`] as any)
+      if (ckb && ckb.length) {
+        ckb[0].toggle()
+        this.$nextTick(() => {
+          this.changeSelected(this.selected)
+        })
+      }
     }
   }
   handleSwipeClose (clickPosition: string, instance: any) {
